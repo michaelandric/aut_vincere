@@ -41,7 +41,7 @@ def getSoupFromURL(url, supressOutput=True):
     except:
         return None
 
-    return BeautifulSoup(r.text)
+    return BeautifulSoup(r.text, "html.parser")
 
 
 def getCurrentPlayerNamesAndURLS(supressOutput=True):
