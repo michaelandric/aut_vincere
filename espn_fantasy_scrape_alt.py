@@ -13,19 +13,6 @@ import re
 from pprint import pprint
 
 
-def get_roster(idx, soop):
-    player_table = soop.find_all(
-        'table', class_='playerTableTable')[idx].find_all('tr', 'pncPlayerRow')
-    roster_list = []
-    for n in range(len(player_table)):
-        try:
-            player = str(player_table[n].a).split('>')[1].split('</a')[0]
-            roster_list.append(player)
-        except (IndexError):
-            pass
-    return roster_list
-
-
 def return_rosters(espn_league_url=None):
     """
     Will ask you to enter username and password for the espn fantasy login.
@@ -34,6 +21,7 @@ def return_rosters(espn_league_url=None):
         espn_league_url = "http://games.espn.com/fba/leagueoffice?leagueId=133847&seasonId=2017"
     driver = webdriver.Chrome()
 
+    print('Now starting driver.')
     driver.get(espn_league_url)
     #implement wait it is mandatory in this case
     WebDriverWait(driver,1000).until(EC.presence_of_all_elements_located((By.XPATH,"(//iframe)")))
@@ -59,8 +47,17 @@ def return_rosters(espn_league_url=None):
         team_names.append(str(tag.a).split('>')[1].split('<')[0].lower())
     roster_dict = {}
 
-    for i, team in enumerate(team_names):
-        roster_dict[team] = get_roster(i, soup)
+    for idx, team in enumerate(team_names):
+        player_table = soup.find_all(
+            'table', class_='playerTableTable')[idx].find_all('tr', 'pncPlayerRow')
+        roster_list = []
+        for n in range(len(player_table)):
+            try:
+                player = str(player_table[n].a).split('>')[1].split('</a')[0]
+                roster_list.append(player)
+            except (IndexError):
+                pass
+        roster_dict[team] = roster_list
 
     driver.close()
     
