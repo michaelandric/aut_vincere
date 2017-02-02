@@ -35,11 +35,12 @@ def return_rosters(espn_league_url=None):
     driver = webdriver.Chrome()
 
     driver.get(espn_league_url)
+    driver.get(espn_league_url)
     #implement wait it is mandatory in this case
     WebDriverWait(driver,1000).until(EC.presence_of_all_elements_located((By.XPATH,"(//iframe)")))
     frms = driver.find_elements_by_xpath("(//iframe)")
 
-    driver.switch_to_frame(frms[2])
+    driver.switch_to_frame(frms[3])
     time.sleep(2)
     driver.find_element_by_xpath("(//input)[1]").send_keys(getpass("username: "))
     driver.find_element_by_xpath("(//input)[2]").send_keys(getpass("password: "))
